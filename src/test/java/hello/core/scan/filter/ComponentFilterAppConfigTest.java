@@ -17,8 +17,6 @@ public class ComponentFilterAppConfigTest {
     void componentFilterConfigTest() {
         BeanA beanA = ac.getBean("beanA", BeanA.class);
         assertThat(beanA).isNotNull();
-
-
     }
 
     @Configuration
