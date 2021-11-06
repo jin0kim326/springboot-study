@@ -45,6 +45,7 @@ public class SingletonWithPrototypeTest1 {
     @Scope("singleton")
     static class SingletonBean {
         //생성시점에 이미 주입 => logic()함수마다 생성하고싶으면? ObjectProvider사용
+        // JSR330 Provider를 사용할 수도 있지만, 스프링이 제공하는 ObjectProvider를 사용하면됨
 //        private PrototypeBean prototypeBean;
 
         private ObjectProvider<PrototypeBean> prototypeBeanProvider;
