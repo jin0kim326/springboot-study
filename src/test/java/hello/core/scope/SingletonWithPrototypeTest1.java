@@ -2,6 +2,7 @@ package hello.core.scope;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -35,7 +36,7 @@ public class SingletonWithPrototypeTest1 {
 
         SingletonBean singletonBean2 = ac.getBean(SingletonBean.class);
         int logic2 = singletonBean2.logic();
-        Assertions.assertThat(logic2).isEqualTo(2);
+        Assertions.assertThat(logic2).isEqualTo(1);
 
         ac.close();
     }
@@ -43,14 +44,17 @@ public class SingletonWithPrototypeTest1 {
 
     @Scope("singleton")
     static class SingletonBean {
-        private PrototypeBean prototypeBean;    //생성시점에 이미 주입
+        //생성시점에 이미 주입 => logic()함수마다 생성하고싶으면? ObjectProvider사용
+//        private PrototypeBean prototypeBean;
 
-        @Autowired
-        public SingletonBean(PrototypeBean prototypeBean) {
-            this.prototypeBean = prototypeBean;
+        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
+
+        public SingletonBean(ObjectProvider<PrototypeBean> prototypeBeanProvider) {
+            this.prototypeBeanProvider = prototypeBeanProvider;
         }
 
         public int logic() {
+            PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
             prototypeBean.addCount();
             return prototypeBean.getCount();
         }
